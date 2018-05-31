@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/homepage_search"
+        android:title="@string/action_search"
+        android:imeOptions="actionSearch"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="always"/>
+
+
+    <item
+        android:id="@+id/home_label"
+        android:title="标签"
+        android:icon="@drawable/ic_insert_drive_file_black_24dp"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/add_ask"
+        android:title="提问"
+        android:icon="@drawable/ic_mode_edit_black_24dp"
+        app:showAsAction="always"/>
+
+
+</menu>

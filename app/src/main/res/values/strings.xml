@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">GeoQuiz</string>
+
+    <string name="question_text">
+        Constantinople is the largest city in Turkey.
+    </string>
+
+    <string name="hello_worle">Hello world!</string>
+    <string name="crime_title_hint">Enter a title for the crime.</string>
+
+    <string name="crime_title_label">Title</string>
+    <string name="crime_details_label">Detail</string>
+    <string name="crime_solved_label">Solved</string>
+
+
+    <string name="true_button">TRUE</string>
+    <string name="false_button">FALSSE</string>
+
+    <string name="correct_toast">Correct!</string>
+    <string name="incorrect_toast">Incorrect!</string>
+    <string name="title_activity_login">Sign in</string>
+
+
+    <string name="action_search">Search</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">用户名</string>
+    <string name="prompt_password">密码(optional)</string>
+    <string name="action_sign_in">登录</string>
+    <string name="action_register">注册</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+
+
+
+    </string>
+</resources>

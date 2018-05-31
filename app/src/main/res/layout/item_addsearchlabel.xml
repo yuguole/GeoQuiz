@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:orientation="vertical"
+    android:alpha="0.5"
+    android:background="@color/colorPrimary"
+    android:layout_marginRight="20dp"
+    android:layout_marginLeft="20dp"
+
+    android:id="@+id/label_item"
+    android:longClickable="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+
+        android:layout_margin="10dp"
+        >
+
+        <TextView
+            android:id="@+id/item_searchlabel_title"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:textSize="24sp"
+            android:typeface="serif" />
+
+
+
+    </RelativeLayout>
+
+</LinearLayout>
