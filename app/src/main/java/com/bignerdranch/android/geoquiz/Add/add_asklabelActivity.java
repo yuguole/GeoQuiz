@@ -188,7 +188,7 @@ public class add_asklabelActivity extends AppCompatActivity implements Toolbar.O
                     public void onItemClick(View view, int position) {
                         //Toast.makeText(add_asklabelActivity.this, "点击", Toast.LENGTH_SHORT).show();
                         // do whatever
-                        final TextView lbtitle = (TextView) view.findViewById(R.id.item_label_title);
+                        final TextView lbtitle = (TextView) view.findViewById(R.id.item_searchlabel_title);
                         LabelBean data = new LabelBean();
                         data.setLb_title(lbtitle.getText().toString());
 
@@ -315,10 +315,12 @@ public class add_asklabelActivity extends AppCompatActivity implements Toolbar.O
         switch (item.getItemId()) {
 
             case R.id.add_asklabel:
+
                 //Toast.makeText(add_asklabelActivity.this, addLabel.toString(), Toast.LENGTH_LONG).show();
                 Intent i = new Intent(add_asklabelActivity.this, addAskActivity.class);
                 //Intent i = new Intent(getActivity(), addAskActivity.class);
                 startActivity(i);
+                finish();
                 break;
 
         }

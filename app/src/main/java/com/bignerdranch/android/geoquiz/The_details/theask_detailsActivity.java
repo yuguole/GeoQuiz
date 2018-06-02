@@ -46,6 +46,7 @@ public class theask_detailsActivity extends AppCompatActivity implements Toolbar
     private TextView askuser;
     private TextView asktime;
     private TextView askdetail;
+    private TextView asklabel;
     //private Button button_addreply;
 
     private RecyclerView reply_Recycler;
@@ -81,6 +82,8 @@ public class theask_detailsActivity extends AppCompatActivity implements Toolbar
         askuser=(TextView)findViewById(R.id.ask_home_askname);
         asktime=(TextView)findViewById(R.id.ask_home_asktime);
         askdetail=(TextView)findViewById(R.id.ask_home_ask_detail);
+        asklabel=(TextView)findViewById(R.id.theask_label);
+
         initText();
 
         theask_toolbar = (Toolbar) findViewById(R.id.toolbar_theask_detail);
@@ -269,6 +272,14 @@ public class theask_detailsActivity extends AppCompatActivity implements Toolbar
                             asktitle.setText(response.optString("ask_title"));
                             JSONObject ask_user = response.optJSONObject("ask_user");
                             askuser.setText(ask_user.optString("username"));
+
+                            JSONArray ask_label=response.optJSONArray("ask_label");
+                            String theasklabel="";
+                            for (int i=0;i<ask_label.length();i++){
+                                JSONObject jsonData = ask_label.optJSONObject(i);
+                                theasklabel=theasklabel+" * "+jsonData.optString("lb_title");
+                            }
+                            asklabel.setText(theasklabel);
                             }
                             //Toast.makeText(getActivity(), mDatas.toString(), Toast.LENGTH_SHORT).show();
                         }

@@ -27,6 +27,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bignerdranch.android.geoquiz.Adapter.DataAdapter;
+import com.bignerdranch.android.geoquiz.Add.addAskActivity;
 import com.bignerdranch.android.geoquiz.Add.add_asklabelActivity;
 import com.bignerdranch.android.geoquiz.Models.AskBean;
 import com.bignerdranch.android.geoquiz.R;
@@ -303,8 +304,6 @@ public class Homepage extends Fragment implements Toolbar.OnMenuItemClickListene
                 Intent intent=new Intent(getActivity(),theask_detailsActivity.class);
                 getActivity().startActivity(intent);
             }
-
-
 
             @Override
             public boolean onMenuItemClick(MenuItem item) {

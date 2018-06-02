@@ -46,6 +46,7 @@ public class thelabel_askActivity extends AppCompatActivity {
     private List<AskBean> labelask_Datas;
     private Toolbar labelask_toolbar;
     private SearchView labelask_SearchView;
+    private TextView label_textview;
     FullyLinearLayoutManager labelask_LayoutManager = new FullyLinearLayoutManager(this);
 
     private static final String url = "http://yuguole.pythonanywhere.com/Iknow/label_ask";
@@ -54,12 +55,14 @@ public class thelabel_askActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_label_ask);
+        setContentView(R.layout.activity_thelabel_ask);
 
         initView();
     }
 
     private void initView() {
+
+        label_textview=(TextView)findViewById(R.id.thelabel_ask) ;
         labelask_Recycler = (RecyclerView) findViewById(R.id.recyclerview_labelask);
         //如果item的内容不改变view布局大小，那使用这个设置可以提高RecyclerView的效率
         labelask_Recycler.setHasFixedSize(true);
@@ -130,37 +133,48 @@ public class thelabel_askActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         if (response != null && response.length() > 0) {
-                            JSONArray ask = response.optJSONArray("label_ask");
 
-                            //String dataString = ask.toString();
-                            Log.d(TAG, String.valueOf(response));
+                            int status=response.optInt("status");
+                            if(status==200)
+                            {
+                                JSONArray ask = response.optJSONArray("label_ask");
 
-                            labelask_Datas = new ArrayList<AskBean>();
-                            for (int i = 0; i < ask.length(); i++) {
-                                JSONObject jsonData = ask.optJSONObject(i);
-                                //JSONObject jsonData1 = jsonData.optJSONObject("fields");
+                                //String dataString = ask.toString();
+                                Log.d(TAG, String.valueOf(response));
 
-                                AskBean data = new AskBean();
-                                data.setTitle(jsonData.optString("asktitle"));
-                                data.setDetails(jsonData.optString("askdetails"));
-                                data.setAsktime(jsonData.optString("asktime"));
-                                data.setAskuser(jsonData.optString("askuser"));
+                                labelask_Datas = new ArrayList<AskBean>();
+                                for (int i = 0; i < ask.length(); i++) {
+                                    JSONObject jsonData = ask.optJSONObject(i);
+                                    //JSONObject jsonData1 = jsonData.optJSONObject("fields");
 
-                                labelask_Datas.add(data);
-                                //test.setText(ask.toString());
-                                //Log.i(TAG,e();getMessage(),volleyError);
+                                    AskBean data = new AskBean();
+                                    data.setTitle(jsonData.optString("asktitle"));
+                                    data.setDetails(jsonData.optString("askdetails"));
+                                    data.setAsktime(jsonData.optString("asktime"));
+                                    data.setAskuser(jsonData.optString("askuser"));
+
+                                    labelask_Datas.add(data);
+                                    //test.setText(ask.toString());
+                                    //Log.i(TAG,e();getMessage(),volleyError);
+                                }
+
+                                labelask_Adapter = new DataAdapter(thelabel_askActivity.this, labelask_Datas);
+                                labelask_Recycler.setAdapter(labelask_Adapter);
+
+                                labelask_Recycler.setLayoutManager(labelask_LayoutManager);
+                                //noteRecycler.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
+                                //使用系统默认分割线
+                                labelask_Recycler.addItemDecoration(new DividerItemDecoration(thelabel_askActivity.this, DividerItemDecoration.VERTICAL));
+
+                            }else if(status==300){
+                                label_textview.setText("该标签下暂没有问题");
+                                //Toast.makeText(thelabel_askActivity.this, "该标签下暂没有问题", Toast.LENGTH_SHORT).show();
                             }
+
                             //Toast.makeText(getActivity(), mDatas.toString(), Toast.LENGTH_SHORT).show();
                         }
 
-                        Toast.makeText(thelabel_askActivity.this, "加载成功", Toast.LENGTH_SHORT).show();
-                        labelask_Adapter = new DataAdapter(thelabel_askActivity.this, labelask_Datas);
-                        labelask_Recycler.setAdapter(labelask_Adapter);
-
-                        labelask_Recycler.setLayoutManager(labelask_LayoutManager);
-                        //noteRecycler.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
-                        //使用系统默认分割线
-                        labelask_Recycler.addItemDecoration(new DividerItemDecoration(thelabel_askActivity.this, DividerItemDecoration.VERTICAL));
+                        //Toast.makeText(thelabel_askActivity.this, "加载成功", Toast.LENGTH_SHORT).show();
                         //mAdapter.notifyDataSetChanged();
                     }
                 }, new Response.ErrorListener() {
