@@ -52,6 +52,13 @@ public class addReplyActivity extends AppCompatActivity implements Toolbar.OnMen
 
         addreply_toolbar.inflateMenu(R.menu.menu_sendreply);
         addreply_toolbar.setOnMenuItemClickListener(this);
+        addreply_toolbar.setNavigationIcon(R.drawable.ic_back2);
+        addreply_toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
 
     }
