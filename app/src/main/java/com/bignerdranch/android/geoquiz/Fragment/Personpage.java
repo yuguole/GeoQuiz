@@ -17,11 +17,13 @@ import com.bignerdranch.android.geoquiz.Persondetails.myReplyActivity;
 import com.bignerdranch.android.geoquiz.all_labelActivity;
 import com.bignerdranch.android.geoquiz.Persondetails.myAskActivity;
 import com.bignerdranch.android.geoquiz.R;
+import com.bignerdranch.android.geoquiz.login1Activity;
 
 public class Personpage extends Fragment implements Toolbar.OnMenuItemClickListener {
 
     private LinearLayout myAsk,myLabel,myReply;
     private Toolbar toolbar;
+    private Button exit;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -33,6 +35,7 @@ public class Personpage extends Fragment implements Toolbar.OnMenuItemClickListe
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         toolbar=(Toolbar)getActivity().findViewById(R.id.toolbar_person);
         toolbar.setTitle("我的");//标题
         // ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
@@ -48,6 +51,16 @@ public class Personpage extends Fragment implements Toolbar.OnMenuItemClickListe
         myLabel=(LinearLayout) getActivity().findViewById(R.id.layout_mylabel);
         myAsk=(LinearLayout) getActivity().findViewById(R.id.layout_myask);
         myReply=(LinearLayout) getActivity().findViewById(R.id.layout_myreply);
+        exit=(Button)getActivity().findViewById(R.id.person_exit);
+
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Toast.makeText(getActivity(), "mylabel", Toast.LENGTH_LONG).show();
+                Intent i = new Intent(getActivity(),login1Activity.class);
+                startActivity(i);
+            }
+        });
 
         myLabel.setOnClickListener(new View.OnClickListener() {
             @Override

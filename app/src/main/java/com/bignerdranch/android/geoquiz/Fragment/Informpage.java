@@ -52,6 +52,7 @@ public class Informpage extends Fragment implements Toolbar.OnMenuItemClickListe
     private InformAdapter findListAdapter;
     private List<ReplyBean> findList;
     private List<ReplyBean> mDatas;
+    private TextView theinform;
 
 
     private Toolbar toolbar;
@@ -81,6 +82,8 @@ public class Informpage extends Fragment implements Toolbar.OnMenuItemClickListe
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        theinform=(TextView)getActivity().findViewById(R.id.theinform);
 
         toolbar=(Toolbar)getActivity().findViewById(R.id.toolbar_inform);
         toolbar.setTitle("通知");//标题
@@ -152,34 +155,44 @@ public class Informpage extends Fragment implements Toolbar.OnMenuItemClickListe
                     @Override
                     public void onResponse(JSONObject response) {
                         if (response!=null&&response.length()>0){
-                            JSONArray info = response.optJSONArray("myask_reinfo");
+                            int status=response.optInt("status");
+                            if(status==200)
+                            {
+                                JSONArray info = response.optJSONArray("myask_reinfo");
 
-                            mDatas = new ArrayList<ReplyBean>();
-                            for (int i = 0; i < info.length(); i++) {
-                                JSONObject jsonData = info.optJSONObject(i);
-                                //JSONObject jsonData1 = ask.optJSONObject("fields");
-                                ReplyBean data = new ReplyBean();
-                                data.setRe_id(jsonData.optInt("re_infoid"));
-                                data.setRe_ask(jsonData.optString("re_infoask"));
-                                data.setRe_user(jsonData.optString("re_infousr"));
-                                data.setRe_time(jsonData.optString("re_infotime"));
+                                mDatas = new ArrayList<ReplyBean>();
+                                for (int i = 0; i < info.length(); i++) {
+                                    JSONObject jsonData = info.optJSONObject(i);
+                                    //JSONObject jsonData1 = ask.optJSONObject("fields");
+                                    ReplyBean data = new ReplyBean();
+                                    data.setRe_id(jsonData.optInt("re_infoid"));
+                                    data.setRe_ask(jsonData.optString("re_infoask"));
+                                    data.setRe_user(jsonData.optString("re_infousr"));
+                                    data.setRe_time(jsonData.optString("re_infotime"));
 
-                                mDatas.add(data);
-                                //test.setText(ask.toString());
-                                //Log.i(TAG,e();getMessage(),volleyError);
+                                    mDatas.add(data);
+                                    //test.setText(ask.toString());
+                                    //Log.i(TAG,e();getMessage(),volleyError);
+                                }
+                                Toast.makeText(getActivity(), "加载成功", Toast.LENGTH_SHORT).show();
+                                mAdapter =  new InformAdapter(getActivity(),mDatas);
+                                informRecycler.setAdapter(mAdapter);
+
+                                informRecycler.setLayoutManager(mLayoutManager);
+                                //informRecycler.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
+                                //使用系统默认分割线
+                                informRecycler.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL));
+                                //mAdapter.notifyDataSetChanged();
+                            }else if(status==300){
+                                theinform.setText("暂时没有通知");
+                                //Toast.makeText(thelabel_askActivity.this, "该标签下暂没有问题", Toast.LENGTH_SHORT).show();
                             }
+
+
                             //Toast.makeText(getActivity(), mDatas.toString(), Toast.LENGTH_SHORT).show();
                         }
 
-                        Toast.makeText(getActivity(), "加载成功", Toast.LENGTH_SHORT).show();
-                        mAdapter =  new InformAdapter(getActivity(),mDatas);
-                        informRecycler.setAdapter(mAdapter);
 
-                        informRecycler.setLayoutManager(mLayoutManager);
-                        //informRecycler.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
-                        //使用系统默认分割线
-                        informRecycler.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL));
-                        //mAdapter.notifyDataSetChanged();
                     }
                 }, new Response.ErrorListener() {
             @Override

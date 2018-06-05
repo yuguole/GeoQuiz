@@ -1,9 +1,11 @@
 package com.bignerdranch.android.geoquiz.Add;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -39,6 +41,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static android.app.PendingIntent.getActivity;
 import static com.android.volley.VolleyLog.TAG;
 
 public class add_asklabelActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
@@ -201,10 +204,47 @@ public class add_asklabelActivity extends AppCompatActivity implements Toolbar.O
                     }
 
                     @Override
-                    public void onLongItemClick(View view, int position) {
+                    public void onLongItemClick(final View view, final int position) {
                         Toast.makeText(add_asklabelActivity.this, "长按", Toast.LENGTH_SHORT).show();
                         // do whatever
+                        AlertDialog.Builder builder = new AlertDialog.Builder(add_asklabelActivity.this);
+                        builder.setTitle("提示");
+                        builder.setMessage("确定删除该标签？");
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // int ret = noteDao.deleteNote(note.getId());
+                                //deleteNote(note.getId());
+                                //refreshNoteList();
+                                final TextView detitle = (TextView) view.findViewById(R.id.item_nowlabel_title);
+                                String deltitle=detitle.getText().toString();
+                                //data.getLb_title().equals(detitle.getText().toString());
+                                //addasklabel_Adapter.n(position);
+                                for (int i=0;i<addLabel.size();i++)
+                                {
+                                    LabelBean information = addLabel.get(i);
+                                    if (information.getLb_title().equals(deltitle)) {
+                                        addLabel.remove(information);
+                                    }
+                                }
+                                addasklabel_Adapter.notifyDataSetChanged();
+                                Toast.makeText(add_asklabelActivity.this, "删除"+deltitle, Toast.LENGTH_SHORT).show();
+                                // do whatever
+                        /*if (ret > 0){
+                            Toast.makeText(getActivity(), "删除成功", Toast.LENGTH_SHORT).show();
+                            //TODO 删除笔记成功后，记得删除图片（分为本地图片和网络图片）
+                            //获取笔记中图片的列表 StringUtils.getTextFromHtml(note.getContent(), true);
+                            refreshNoteList();
+                        }*/
+                            }
+                        });
+                        builder.setNegativeButton("取消", null);
+                        builder.create().show();
+                        
                     }
+
+
                 })
         );
 
