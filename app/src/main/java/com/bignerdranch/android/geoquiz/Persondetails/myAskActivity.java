@@ -23,12 +23,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bignerdranch.android.geoquiz.Adapter.DataAdapter;
+import com.bignerdranch.android.geoquiz.Add.add_asklabelActivity;
 import com.bignerdranch.android.geoquiz.Fragment.Homepage;
 import com.bignerdranch.android.geoquiz.Fragment.RecyclerItemClickListener;
 import com.bignerdranch.android.geoquiz.The_details.theask_detailsActivity;
 import com.bignerdranch.android.geoquiz.Models.AskBean;
 import com.bignerdranch.android.geoquiz.Fragment.FullyLinearLayoutManager;
 import com.bignerdranch.android.geoquiz.R;
+import com.bignerdranch.android.geoquiz.all_labelActivity;
 import com.bignerdranch.android.geoquiz.login1Activity;
 
 import org.json.JSONArray;
@@ -48,6 +50,7 @@ public class myAskActivity extends AppCompatActivity implements Toolbar.OnMenuIt
     private List<AskBean> myask_Datas;
     private Toolbar myask_toolbar;
     private SearchView myask_SearchView;
+    private TextView myask_text;
     FullyLinearLayoutManager myask_LayoutManager = new FullyLinearLayoutManager(this);
 
     private static final String url = "http://yuguole.pythonanywhere.com/Iknow/myask";
@@ -67,6 +70,8 @@ public class myAskActivity extends AppCompatActivity implements Toolbar.OnMenuIt
         myask_Recycler = (RecyclerView) findViewById(R.id.recyclerview_myask);
         //如果item的内容不改变view布局大小，那使用这个设置可以提高RecyclerView的效率
         myask_Recycler.setHasFixedSize(true);
+        myask_text=(TextView)findViewById(R.id.myask_text);
+
         myask_toolbar = (Toolbar) findViewById(R.id.toolbar_myask);
         myask_toolbar.setTitle("我提出的问题");//标题
         myask_toolbar.inflateMenu(R.menu.menu_myask);
@@ -133,38 +138,42 @@ public class myAskActivity extends AppCompatActivity implements Toolbar.OnMenuIt
                     @Override
                     public void onResponse(JSONObject response) {
                         if (response != null && response.length() > 0) {
-                            JSONArray ask = response.optJSONArray("content");
+                            int status = response.optInt("status");
+                            if (status == 200) {
+                                JSONArray ask = response.optJSONArray("content");
 
-                            //String dataString = ask.toString();
-                            Log.d(TAG, String.valueOf(response));
+                                //String dataString = ask.toString();
+                                Log.d(TAG, String.valueOf(response));
 
-                            myask_Datas = new ArrayList<AskBean>();
-                            for (int i = 0; i < ask.length(); i++) {
-                                JSONObject jsonData = ask.optJSONObject(i);
-                                JSONObject jsonData1 = jsonData.optJSONObject("fields");
+                                myask_Datas = new ArrayList<AskBean>();
+                                for (int i = 0; i < ask.length(); i++) {
+                                    JSONObject jsonData = ask.optJSONObject(i);
+                                    JSONObject jsonData1 = jsonData.optJSONObject("fields");
 
-                                AskBean data = new AskBean();
-                                data.setTitle(jsonData1.optString("ask_title"));
-                                data.setDetails(jsonData1.optString("ask_details"));
-                                data.setAsktime(jsonData1.optString("ask_time"));
-                                data.setAskuser(login1Activity.usernameStr);
+                                    AskBean data = new AskBean();
+                                    data.setTitle(jsonData1.optString("ask_title"));
+                                    data.setDetails(jsonData1.optString("ask_details"));
+                                    data.setAsktime(jsonData1.optString("ask_time"));
+                                    data.setAskuser(login1Activity.usernameStr);
 
-                                myask_Datas.add(data);
-                                //test.setText(ask.toString());
-                                //Log.i(TAG,e();getMessage(),volleyError);
+                                    myask_Datas.add(data);
+                                    //test.setText(ask.toString());
+                                    //Log.i(TAG,e();getMessage(),volleyError);
+                                }
+                                Toast.makeText(myAskActivity.this, "加载成功", Toast.LENGTH_SHORT).show();
+                                myask_Adapter = new DataAdapter(myAskActivity.this, myask_Datas);
+                                myask_Recycler.setAdapter(myask_Adapter);
+
+                                myask_Recycler.setLayoutManager(myask_LayoutManager);
+                                //noteRecycler.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
+                                //使用系统默认分割线
+                                myask_Recycler.addItemDecoration(new DividerItemDecoration(myAskActivity.this, DividerItemDecoration.VERTICAL));
+                                //mAdapter.notifyDataSetChanged();
+                            }else {
+                                myask_text.setText("暂时没有提出问题，点击右上角加号添加新问题");
                             }
                             //Toast.makeText(getActivity(), mDatas.toString(), Toast.LENGTH_SHORT).show();
                         }
-
-                        Toast.makeText(myAskActivity.this, "加载成功", Toast.LENGTH_SHORT).show();
-                        myask_Adapter = new DataAdapter(myAskActivity.this, myask_Datas);
-                        myask_Recycler.setAdapter(myask_Adapter);
-
-                        myask_Recycler.setLayoutManager(myask_LayoutManager);
-                        //noteRecycler.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
-                        //使用系统默认分割线
-                        myask_Recycler.addItemDecoration(new DividerItemDecoration(myAskActivity.this, DividerItemDecoration.VERTICAL));
-                        //mAdapter.notifyDataSetChanged();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -211,6 +220,17 @@ public class myAskActivity extends AppCompatActivity implements Toolbar.OnMenuIt
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        return false;
+        switch (item.getItemId()) {
+
+            case R.id.myask_add_ask:
+                //Toast.makeText(getActivity(), "Clicked", Toast.LENGTH_LONG).show();
+                Intent i = new Intent(myAskActivity.this, add_asklabelActivity.class);
+                //Intent i = new Intent(getActivity(), addAskActivity.class);
+                startActivity(i);
+                break;
+
+
+        }
+        return true;
     }
 }

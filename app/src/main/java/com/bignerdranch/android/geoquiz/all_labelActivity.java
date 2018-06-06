@@ -1,20 +1,24 @@
 package com.bignerdranch.android.geoquiz;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,9 +29,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bignerdranch.android.geoquiz.Adapter.LabelAdapter;
+import com.bignerdranch.android.geoquiz.Add.add_asklabelActivity;
 import com.bignerdranch.android.geoquiz.Fragment.FullyLinearLayoutManager;
 import com.bignerdranch.android.geoquiz.Fragment.RecyclerItemClickListener;
 import com.bignerdranch.android.geoquiz.Models.LabelBean;
+import com.bignerdranch.android.geoquiz.Persondetails.myAskActivity;
 import com.bignerdranch.android.geoquiz.The_details.thelabel_askActivity;
 
 import org.json.JSONArray;
@@ -54,6 +60,8 @@ public class all_labelActivity extends AppCompatActivity implements Toolbar.OnMe
 
     public static String The_LabelStr;
     private static final String showurl = "http://yuguole.pythonanywhere.com/Iknow/showlabel";
+    private static final String adduserlabelurl = "http://yuguole.pythonanywhere.com/Iknow/adduser_label";
+    private static final String addnewlabelurl = "http://yuguole.pythonanywhere.com/Iknow/addlabel";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,23 +180,77 @@ public class all_labelActivity extends AppCompatActivity implements Toolbar.OnMe
         //点击跳转
         all_label_Recycler.addOnItemTouchListener(
                 new RecyclerItemClickListener(all_labelActivity.this, all_label_Recycler,new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override public void onItemClick(View view, int position) {
+                    @Override
+                    public void onItemClick(View view, int position) {
                         //Toast.makeText(all_labelActivity.this, "点击", Toast.LENGTH_SHORT).show();
                         // do whatever
-                        final TextView lbtitle=(TextView)view.findViewById(R.id.item_label_title);
-                        The_LabelStr=lbtitle.getText().toString();
+                        final TextView lbtitle = (TextView) view.findViewById(R.id.item_label_title);
+                        The_LabelStr = lbtitle.getText().toString();
                         Toast.makeText(all_labelActivity.this, The_LabelStr, Toast.LENGTH_SHORT).show();
                         startLabel_askActivity();
 
                     }
 
-                    @Override public void onLongItemClick(View view, int position) {
-                        Toast.makeText(all_labelActivity.this, "长按", Toast.LENGTH_SHORT).show();
-                        // do whatever
+                    @Override
+                    public void onLongItemClick(final View view, int position) {
+                        //Toast.makeText(all_labelActivity.this, "长按", Toast.LENGTH_SHORT).show();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(all_labelActivity.this);
+                        builder.setTitle("提示");
+                        builder.setMessage("是否关注该标签？");
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                final TextView lbtitle1 = (TextView) view.findViewById(R.id.item_label_title);
+                                String likelabel = lbtitle1.getText().toString();
+                                addlikelabel(likelabel);
+                            }
+                        });
+                        builder.setNegativeButton("否", null);
+                        builder.create().show();
                     }
+
                 })
         );
 
+    }
+
+    private void addlikelabel(final String likelabel) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        //JSONArray ask=null;
+//       (2)使用相应的请求需求
+        Toast.makeText(this, showurl, Toast.LENGTH_SHORT).show();
+
+        Map<String, String> map = new HashMap<>();
+        map.put("username", login1Activity.usernameStr);
+        map.put("userlabel",likelabel);
+
+        map.put("Content-Type", "application/json; charset=utf-8");
+        JSONObject paramJsonObject = new JSONObject(map);
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, adduserlabelurl, paramJsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if (response != null && response.length() > 0) {
+                            int status = response.optInt("status");
+                            if (status == 200) {
+                                Toast.makeText(all_labelActivity.this, "关注"+likelabel+"成功", Toast.LENGTH_SHORT).show();
+                            }else {
+                                Toast.makeText(all_labelActivity.this, "关注失败", Toast.LENGTH_SHORT).show();
+                            }
+                            //Toast.makeText(getActivity(), mDatas.toString(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Toast.makeText(all_labelActivity.this, volleyError.toString(), Toast.LENGTH_SHORT).show();
+                Log.i(TAG, volleyError.getMessage(), volleyError);
+            }
+        });
+        //(3)将请求需求加入到请求队列之中。
+        queue.add(request);
     }
 
     private void startLabel_askActivity() {
@@ -230,7 +292,7 @@ public class all_labelActivity extends AppCompatActivity implements Toolbar.OnMe
         RequestQueue queue = Volley.newRequestQueue(this);
         //JSONArray ask=null;
 //       (2)使用相应的请求需求
-        Toast.makeText(this, showurl, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, showurl, Toast.LENGTH_SHORT).show();
 
         Map<String, String> map = new HashMap<>();
         //map.put("username", login1Activity.usernameStr);
@@ -284,8 +346,68 @@ public class all_labelActivity extends AppCompatActivity implements Toolbar.OnMe
 
     }
 
+    private void addnewlabel(final String label){
+        RequestQueue queue = Volley.newRequestQueue(this);
+        //JSONArray ask=null;
+//       (2)使用相应的请求需求
+        //Toast.makeText(this, showurl, Toast.LENGTH_SHORT).show();
+
+        Map<String, String> map = new HashMap<>();
+        map.put("lb_title", label);
+
+        map.put("Content-Type", "application/json; charset=utf-8");
+        JSONObject paramJsonObject = new JSONObject(map);
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, addnewlabelurl, paramJsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if (response != null && response.length() > 0) {
+                            int status = response.optInt("status");
+                            if (status == 200) {
+                                Toast.makeText(all_labelActivity.this, "添加"+label+"成功", Toast.LENGTH_SHORT).show();
+                            }else {
+                                Toast.makeText(all_labelActivity.this, "添加失败", Toast.LENGTH_SHORT).show();
+                            }
+                            //Toast.makeText(getActivity(), mDatas.toString(), Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Toast.makeText(all_labelActivity.this, volleyError.toString(), Toast.LENGTH_SHORT).show();
+                Log.i(TAG, volleyError.getMessage(), volleyError);
+            }
+        });
+        //(3)将请求需求加入到请求队列之中。
+        queue.add(request);
+    }
+
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        return false;
+        switch (item.getItemId()) {
+
+            case R.id.labelshow_add_label:
+                final EditText Inputlabel = new EditText(this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(all_labelActivity.this);
+                builder.setTitle("添加新标签");
+                builder.setMessage("请输入新标签：");
+                builder.setView(Inputlabel);
+                builder.setCancelable(false);
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String inputlabel=Inputlabel.getText().toString().trim();
+                        addnewlabel(inputlabel);
+                    }
+                });
+                builder.setNegativeButton("取消", null);
+                builder.create().show();
+                init();
+                break;
+
+        }
+        return true;
     }
 }

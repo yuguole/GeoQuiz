@@ -47,6 +47,8 @@ public class myReplyActivity extends AppCompatActivity implements Toolbar.OnMenu
     private List<ReplyBean> myreply_Datas;
     private Toolbar myreply_toolbar;
     //private SearchView myask_SearchView;
+    private TextView myreply_text;
+
     FullyLinearLayoutManager myreply_LayoutManager = new FullyLinearLayoutManager(this);
 
     private static final String url = "http://yuguole.pythonanywhere.com/Iknow/myreply";
@@ -63,6 +65,8 @@ public class myReplyActivity extends AppCompatActivity implements Toolbar.OnMenu
         myreply_Recycler = (RecyclerView) findViewById(R.id.recyclerview_myreply);
         //如果item的内容不改变view布局大小，那使用这个设置可以提高RecyclerView的效率
         myreply_Recycler.setHasFixedSize(true);
+
+        myreply_text=(TextView)findViewById(R.id.myreply_text);
         myreply_toolbar = (Toolbar) findViewById(R.id.toolbar_myreply);
         myreply_toolbar.setTitle("我回复的问题");//标题
         myreply_toolbar.inflateMenu(R.menu.menu_myreply);
@@ -167,6 +171,8 @@ public class myReplyActivity extends AppCompatActivity implements Toolbar.OnMenu
                                 myreply_Recycler.addItemDecoration(new DividerItemDecoration(myReplyActivity.this, DividerItemDecoration.VERTICAL));
                                 //mAdapter.notifyDataSetChanged();
                                 //Toast.makeText(getActivity(), mDatas.toString(), Toast.LENGTH_SHORT).show();
+                            }else {
+                                myreply_text.setText("暂时没有回复问题");
                             }
 
                             //Toast.makeText(getActivity(), mDatas.toString(), Toast.LENGTH_SHORT).show();

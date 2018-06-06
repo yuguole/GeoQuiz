@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bignerdranch.android.geoquiz.Persondetails.myLabelActivity;
@@ -24,6 +25,7 @@ public class Personpage extends Fragment implements Toolbar.OnMenuItemClickListe
     private LinearLayout myAsk,myLabel,myReply;
     private Toolbar toolbar;
     private Button exit;
+    private TextView myname;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,6 +53,9 @@ public class Personpage extends Fragment implements Toolbar.OnMenuItemClickListe
         myLabel=(LinearLayout) getActivity().findViewById(R.id.layout_mylabel);
         myAsk=(LinearLayout) getActivity().findViewById(R.id.layout_myask);
         myReply=(LinearLayout) getActivity().findViewById(R.id.layout_myreply);
+        myname=(TextView)getActivity().findViewById(R.id.person_myusername);
+        myname.setText(login1Activity.usernameStr);
+
         exit=(Button)getActivity().findViewById(R.id.person_exit);
 
         exit.setOnClickListener(new View.OnClickListener() {

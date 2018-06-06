@@ -318,10 +318,10 @@ public class Homepage extends Fragment implements Toolbar.OnMenuItemClickListene
 
                     case R.id.home_label:
                // Toast.makeText(getActivity(), "Clicked", Toast.LENGTH_LONG).show();
-                Intent i2 = new Intent(getActivity(), all_labelActivity.class);
+                        Intent i2 = new Intent(getActivity(), all_labelActivity.class);
                 //Intent i = new Intent(getActivity(), addAskActivity.class);
-                startActivity(i2);
-                break;
+                        startActivity(i2);
+                        break;
         }
         return true;
 

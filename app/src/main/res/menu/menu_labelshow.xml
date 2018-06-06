@@ -7,4 +7,10 @@
         android:imeOptions="actionSearch"
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/labelshow_add_label"
+        android:title="添加新标签"
+        android:icon="@drawable/ic_add"
+        app:showAsAction="always"/>
 </menu>

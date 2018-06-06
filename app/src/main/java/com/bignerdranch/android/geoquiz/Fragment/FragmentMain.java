@@ -53,6 +53,7 @@ public class FragmentMain extends FragmentActivity implements
         setContentView(R.layout.activity_fragmentmain);
         fManager = getSupportFragmentManager();
 
+
         initViews();
     }
 
@@ -71,6 +72,7 @@ public class FragmentMain extends FragmentActivity implements
         course_layout.setOnClickListener(this);
         found_layout.setOnClickListener(this);
         settings_layout.setOnClickListener(this);
+        setChioceItem(0);
     }
 
     //重写onClick事件

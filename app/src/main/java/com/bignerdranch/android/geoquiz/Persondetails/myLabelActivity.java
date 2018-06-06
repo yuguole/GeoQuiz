@@ -48,6 +48,8 @@ public class myLabelActivity extends AppCompatActivity implements Toolbar.OnMenu
     private List<LabelBean> mylabel_Datas;
     private Toolbar mylabel_toolbar;
     private SearchView mylabel_SearchView;
+    private TextView mylabel_text;
+
     FullyLinearLayoutManager mylabel_LayoutManager = new FullyLinearLayoutManager(this);
 
     private static final String url = "http://yuguole.pythonanywhere.com/Iknow/mylabel";
@@ -69,6 +71,8 @@ public class myLabelActivity extends AppCompatActivity implements Toolbar.OnMenu
         mylabel_Recycler = (RecyclerView) findViewById(R.id.recyclerview_mylabel);
         //如果item的内容不改变view布局大小，那使用这个设置可以提高RecyclerView的效率
         mylabel_Recycler.setHasFixedSize(true);
+        mylabel_text=(TextView)findViewById(R.id.mylabel_text);
+
         mylabel_toolbar = (Toolbar) findViewById(R.id.toolbar_mylabel);
         mylabel_toolbar.setTitle("我关注的标签");//标题
         mylabel_toolbar.inflateMenu(R.menu.menu_mylabel);
@@ -119,7 +123,7 @@ public class myLabelActivity extends AppCompatActivity implements Toolbar.OnMenu
         RequestQueue queue = Volley.newRequestQueue(this);
         //JSONArray ask=null;
 //       (2)使用相应的请求需求
-        Toast.makeText(this, url, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, url, Toast.LENGTH_SHORT).show();
 
         Map<String, String> map = new HashMap<>();
         map.put("username", login1Activity.usernameStr);
@@ -132,35 +136,45 @@ public class myLabelActivity extends AppCompatActivity implements Toolbar.OnMenu
                     @Override
                     public void onResponse(JSONObject response) {
                         if (response != null && response.length() > 0) {
-                            JSONArray label = response.optJSONArray("user_label");
+                            JSONObject content=response.optJSONObject("content");
 
-                            //String dataString = ask.toString();
-                            Log.d(TAG, String.valueOf(response));
+                                JSONArray label = content.optJSONArray("user_label");
 
-                            mylabel_Datas = new ArrayList<LabelBean>();
-                            for (int i = 0; i < label.length(); i++) {
-                                JSONObject jsonData = label.optJSONObject(i);
+                                //String dataString = ask.toString();
+                                Log.d(TAG, String.valueOf(response));
 
-                                LabelBean data = new LabelBean();
-                                data.setLb_title(jsonData.optString("lb_title"));
+                                mylabel_Datas = new ArrayList<LabelBean>();
+                                if (label.length()!=0){
+                                    for (int i = 0; i < label.length(); i++) {
+                                        JSONObject jsonData = label.optJSONObject(i);
+
+                                        LabelBean data = new LabelBean();
+                                        data.setLb_title(jsonData.optString("lb_title"));
 
 
-                                mylabel_Datas.add(data);
-                                //test.setText(ask.toString());
-                                //Log.i(TAG,e();getMessage(),volleyError);
-                            }
+                                        mylabel_Datas.add(data);
+                                        //test.setText(ask.toString());
+                                        //Log.i(TAG,e();getMessage(),volleyError);
+                                    }
+
+                                    Toast.makeText(myLabelActivity.this, "加载成功", Toast.LENGTH_SHORT).show();
+                                    mylabel_Adapter = new LabelAdapter(myLabelActivity.this,mylabel_Datas);
+                                    mylabel_Recycler.setAdapter(mylabel_Adapter);
+
+                                    mylabel_Recycler.setLayoutManager(mylabel_LayoutManager);
+                                    //noteRecycler.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
+                                    //使用系统默认分割线
+                                    mylabel_Recycler.addItemDecoration(new DividerItemDecoration(myLabelActivity.this, DividerItemDecoration.VERTICAL));
+                                    //mAdapter.notifyDataSetChanged();
+                                }else {
+                                    mylabel_text.setText("暂没有关注标签，请点击右上角关注标签");
+                                }
+
+
+
                             //Toast.makeText(getActivity(), mDatas.toString(), Toast.LENGTH_SHORT).show();
                         }
 
-                        Toast.makeText(myLabelActivity.this, "加载成功", Toast.LENGTH_SHORT).show();
-                        mylabel_Adapter = new LabelAdapter(myLabelActivity.this,mylabel_Datas);
-                        mylabel_Recycler.setAdapter(mylabel_Adapter);
-
-                        mylabel_Recycler.setLayoutManager(mylabel_LayoutManager);
-                        //noteRecycler.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
-                        //使用系统默认分割线
-                        mylabel_Recycler.addItemDecoration(new DividerItemDecoration(myLabelActivity.this, DividerItemDecoration.VERTICAL));
-                        //mAdapter.notifyDataSetChanged();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -208,7 +222,7 @@ public class myLabelActivity extends AppCompatActivity implements Toolbar.OnMenu
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.add_label:
+            case R.id.mylabel_add_likelabel:
                 Toast.makeText(myLabelActivity.this, "Clicked", Toast.LENGTH_LONG).show();
                 Intent i = new Intent(myLabelActivity.this, all_labelActivity.class);
                 startActivity(i);

@@ -16,6 +16,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +33,7 @@ import com.bignerdranch.android.geoquiz.Fragment.FullyLinearLayoutManager;
 import com.bignerdranch.android.geoquiz.Fragment.RecyclerItemClickListener;
 import com.bignerdranch.android.geoquiz.Models.LabelBean;
 import com.bignerdranch.android.geoquiz.R;
+import com.bignerdranch.android.geoquiz.all_labelActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -52,6 +54,7 @@ public class add_asklabelActivity extends AppCompatActivity implements Toolbar.O
     private List<LabelBean> addasklabel_Datas;
     private Toolbar addasklabel_toolbar;
     private SearchView addasklabel_SearchView;
+    private TextView addasklabel_text;
     FullyLinearLayoutManager addasklabel_LayoutManager = new FullyLinearLayoutManager(this);
 
     private List<LabelBean> findList;
@@ -64,6 +67,7 @@ public class add_asklabelActivity extends AppCompatActivity implements Toolbar.O
 
     //public static String The_LabelStr;
     private static final String showurl = "http://yuguole.pythonanywhere.com/Iknow/showlabel";
+    private static final String addnewlabelurl = "http://yuguole.pythonanywhere.com/Iknow/addlabel";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +81,7 @@ public class add_asklabelActivity extends AppCompatActivity implements Toolbar.O
         addasklabel_Recycler = (RecyclerView) findViewById(R.id.recyclerview_addasklabel);
         //如果item的内容不改变view布局大小，那使用这个设置可以提高RecyclerView的效率
         addasklabel_Recycler.setHasFixedSize(true);
+        addasklabel_text=(TextView)findViewById(R.id.addasklabel_text);
         addasklabel_toolbar = (Toolbar) findViewById(R.id.toolbar_addasklabel);
         addasklabel_toolbar.setTitle("添加问题标签");//标题
 
@@ -114,7 +119,7 @@ public class add_asklabelActivity extends AppCompatActivity implements Toolbar.O
 
     private void initSearchView() {
         findList = new ArrayList<LabelBean>();
-        addasklabel_SearchView.setQueryHint("你想知道标签");
+        addasklabel_SearchView.setQueryHint("至少添加一个标签");
 
         //Toast.makeText(getActivity(), mSearchView.toString(), Toast.LENGTH_SHORT).show();
         addasklabel_SearchView.setSubmitButtonEnabled(true);
@@ -135,6 +140,18 @@ public class add_asklabelActivity extends AppCompatActivity implements Toolbar.O
                         }
                     }
                     if (findList.size() == 0) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(add_asklabelActivity.this);
+                        builder.setTitle("提示");
+                        builder.setMessage("未搜索到相关标签，是否添加新标签？");
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Addnewlabel();
+                            }
+                        });
+                        builder.setNegativeButton("否", null);
+                        builder.create().show();
                         Toast.makeText(add_asklabelActivity.this, "未搜索到结果", Toast.LENGTH_SHORT).show();
 
                     } else {
@@ -181,7 +198,72 @@ public class add_asklabelActivity extends AppCompatActivity implements Toolbar.O
         //mAdapter=new DataAdapter(getActivity(),)
     }
 
+    private void Addnewlabel() {
+        final EditText Inputlabel = new EditText(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(add_asklabelActivity.this);
+        builder.setTitle("添加新标签");
+        builder.setMessage("请输入新标签：");
+        builder.setView(Inputlabel);
+        builder.setCancelable(false);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String inputlabel=Inputlabel.getText().toString().trim();
+                addnewlabel(inputlabel);
+                LabelBean data = new LabelBean();
+                data.setLb_title(inputlabel);
+                addLabel.add(data);
+                //The_LabelStr=lbtitle.getText().toString();
+                Toast.makeText(add_asklabelActivity.this, "添加了" + inputlabel, Toast.LENGTH_SHORT).show();
+                //startLabel_askActivity();
+                addoneLabel();
+                init();
+            }
+        });
+        builder.setNegativeButton("取消", null);
+        builder.create().show();
+    }
 
+    //添加了新的标签
+    private void addnewlabel(final String label){
+        RequestQueue queue = Volley.newRequestQueue(this);
+        //JSONArray ask=null;
+//       (2)使用相应的请求需求
+        //Toast.makeText(this, showurl, Toast.LENGTH_SHORT).show();
+
+        Map<String, String> map = new HashMap<>();
+        map.put("lb_title", label);
+
+        map.put("Content-Type", "application/json; charset=utf-8");
+        JSONObject paramJsonObject = new JSONObject(map);
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, addnewlabelurl, paramJsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if (response != null && response.length() > 0) {
+                            int status = response.optInt("status");
+                            if (status == 200) {
+                                Toast.makeText(add_asklabelActivity.this, "添加"+label+"成功", Toast.LENGTH_SHORT).show();
+                            }else {
+                                Toast.makeText(add_asklabelActivity.this, "添加失败", Toast.LENGTH_SHORT).show();
+                            }
+                            //Toast.makeText(getActivity(), mDatas.toString(), Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Toast.makeText(add_asklabelActivity.this, volleyError.toString(), Toast.LENGTH_SHORT).show();
+                Log.i(TAG, volleyError.getMessage(), volleyError);
+            }
+        });
+        //(3)将请求需求加入到请求队列之中。
+        queue.add(request);
+    }
+
+    //点击事件
     private void initClickitem() {
 
         //点击跳转
@@ -250,6 +332,7 @@ public class add_asklabelActivity extends AppCompatActivity implements Toolbar.O
 
     }
 
+    //添加了一个问题标签刷新
     private void addoneLabel() {
         addasklabel_Adapter = new LabelnowAdapter(add_asklabelActivity.this, addLabel);
         addasklabel_Recycler.setAdapter(addasklabel_Adapter);
@@ -259,6 +342,7 @@ public class add_asklabelActivity extends AppCompatActivity implements Toolbar.O
         //使用系统默认分割线
         addasklabel_Recycler.addItemDecoration(new DividerItemDecoration(add_asklabelActivity.this, DividerItemDecoration.VERTICAL));
         addasklabel_Adapter.notifyDataSetChanged();
+        addasklabel_text.setText("已经添加的问题标签如下，长按可删除");
     }
 
 
@@ -355,12 +439,29 @@ public class add_asklabelActivity extends AppCompatActivity implements Toolbar.O
         switch (item.getItemId()) {
 
             case R.id.add_asklabel:
+                if (addLabel.size()!=0){
+                    Intent i = new Intent(add_asklabelActivity.this, addAskActivity.class);
+                    //Intent i = new Intent(getActivity(), addAskActivity.class);
+                    startActivity(i);
+                    finish();
+                }else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(add_asklabelActivity.this);
+                    builder.setTitle("提示");
+                    builder.setMessage("至少添加一个问题标签");
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            init();
+                        }
+                    });
+                    builder.setNegativeButton("取消", null);
+                    builder.create().show();
+
+                }
 
                 //Toast.makeText(add_asklabelActivity.this, addLabel.toString(), Toast.LENGTH_LONG).show();
-                Intent i = new Intent(add_asklabelActivity.this, addAskActivity.class);
-                //Intent i = new Intent(getActivity(), addAskActivity.class);
-                startActivity(i);
-                finish();
+
                 break;
 
         }

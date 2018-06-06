@@ -26,6 +26,27 @@
 
         </android.support.design.widget.AppBarLayout>
 
+        <LinearLayout
+            android:id="@+id/layout_myusername"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal"
+            android:background="@color/white">
+
+            <TextView
+                android:id="@+id/person_myusername"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:textSize="30sp"
+                android:typeface="sans"
+                android:textColor="@color/graymore"
+                android:layout_weight="1"
+                />
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/layout_myask"
