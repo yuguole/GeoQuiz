@@ -214,7 +214,7 @@ public class thelabel_askActivity extends AppCompatActivity {
                         Toast.makeText(thelabel_askActivity.this, "更新了数据", Toast.LENGTH_SHORT).show();
                     }
 
-                }, 3000);
+                }, 1000);
 
             }
         });

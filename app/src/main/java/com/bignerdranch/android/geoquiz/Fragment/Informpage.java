@@ -131,7 +131,7 @@ public class Informpage extends Fragment implements Toolbar.OnMenuItemClickListe
                         Toast.makeText(getActivity(), "更新了数据", Toast.LENGTH_SHORT).show();
                     }
 
-                }, 3000);
+                }, 1000);
 
             }
         });

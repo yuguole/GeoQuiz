@@ -166,7 +166,7 @@ public class theask_detailsActivity extends AppCompatActivity implements Toolbar
                         Toast.makeText(theask_detailsActivity.this, "更新了数据", Toast.LENGTH_SHORT).show();
                     }
 
-                }, 3000);
+                }, 1000);
 
             }
         });

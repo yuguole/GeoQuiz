@@ -268,7 +268,7 @@ public class myAskActivity extends AppCompatActivity implements Toolbar.OnMenuIt
                         Toast.makeText(myAskActivity.this, "更新了数据", Toast.LENGTH_SHORT).show();
                     }
 
-                }, 3000);
+                }, 1000);
 
             }
         });

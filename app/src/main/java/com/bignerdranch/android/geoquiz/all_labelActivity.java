@@ -282,7 +282,7 @@ public class all_labelActivity extends AppCompatActivity implements Toolbar.OnMe
                         Toast.makeText(all_labelActivity.this, "更新了数据", Toast.LENGTH_SHORT).show();
                     }
 
-                }, 3000);
+                }, 1000);
 
             }
         });

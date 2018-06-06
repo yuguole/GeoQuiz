@@ -272,7 +272,7 @@ public class myLabelActivity extends AppCompatActivity implements Toolbar.OnMenu
                         Toast.makeText(myLabelActivity.this, "更新了数据", Toast.LENGTH_SHORT).show();
                     }
 
-                }, 3000);
+                }, 1000);
 
             }
         });
