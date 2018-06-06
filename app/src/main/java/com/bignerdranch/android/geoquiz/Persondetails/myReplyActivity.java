@@ -1,9 +1,11 @@
 package com.bignerdranch.android.geoquiz.Persondetails;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -52,6 +54,7 @@ public class myReplyActivity extends AppCompatActivity implements Toolbar.OnMenu
     FullyLinearLayoutManager myreply_LayoutManager = new FullyLinearLayoutManager(this);
 
     private static final String url = "http://yuguole.pythonanywhere.com/Iknow/myreply";
+    private static final String delreplyurl = "http://yuguole.pythonanywhere.com/Iknow/delete_thereply";
 
     //public static String myasktitleStr;
     @Override
@@ -86,9 +89,7 @@ public class myReplyActivity extends AppCompatActivity implements Toolbar.OnMenu
         initClickitem();//点击事件
 
     }
-
-
-
+    
 
     //点击跳转事件
     private void initClickitem() {
@@ -104,13 +105,66 @@ public class myReplyActivity extends AppCompatActivity implements Toolbar.OnMenu
 
                     }
 
-                    @Override public void onLongItemClick(View view, int position) {
-                        Toast.makeText(myReplyActivity.this, "长按", Toast.LENGTH_SHORT).show();
-                        // do whatever
+                    @Override public void onLongItemClick(final View view, int position) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(myReplyActivity.this);
+                        builder.setTitle("提示");
+                        builder.setMessage("确定删除该回复？");
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // int ret = noteDao.deleteNote(note.getId());
+                                //deleteNote(note.getId());
+                                //refreshNoteList();
+                                final TextView deltitle=(TextView)view.findViewById(R.id.item_myreply_reid);
+                                String del=deltitle.getText().toString();
+                                delreply(del);
+                            }
+                        });
+                        builder.setNegativeButton("取消", null);
+                        builder.create().show();
                     }
                 })
         );
 
+    }
+
+    private void delreply(String del) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        //JSONArray ask=null;
+//       (2)使用相应的请求需求
+        //Toast.makeText(this, url, Toast.LENGTH_SHORT).show();
+
+        Map<String, String> map = new HashMap<>();
+        map.put("replyid", del);
+
+
+        map.put("Content-Type", "application/json; charset=utf-8");
+        JSONObject paramJsonObject = new JSONObject(map);
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, delreplyurl, paramJsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if (response != null && response.length() > 0) {
+
+                            Toast.makeText(myReplyActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+                            init();
+
+
+                            //Toast.makeText(getActivity(), mDatas.toString(), Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Toast.makeText(myReplyActivity.this, volleyError.toString(), Toast.LENGTH_SHORT).show();
+                Log.i(TAG, volleyError.getMessage(), volleyError);
+            }
+        });
+        //(3)将请求需求加入到请求队列之中。
+        queue.add(request);
     }
 
     private void start_thereplyActivity() {

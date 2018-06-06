@@ -96,10 +96,7 @@ public class login1Activity extends AppCompatActivity implements View.OnClickLis
             Toast.makeText(this, "用户密码不能为空", Toast.LENGTH_SHORT).show();
             return false;
         }
-
-//
         return true;
-
     }
 
 
@@ -114,7 +111,7 @@ public class login1Activity extends AppCompatActivity implements View.OnClickLis
 
         RequestQueue queue = Volley.newRequestQueue(this);
 //       (2)使用相应的请求需求
-        Toast.makeText(this, url, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, url, Toast.LENGTH_SHORT).show();
 
         Map<String, String> map = new HashMap<>();
         map.put("username", usernameStr);

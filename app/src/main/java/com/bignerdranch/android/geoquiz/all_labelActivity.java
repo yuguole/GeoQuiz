@@ -186,7 +186,7 @@ public class all_labelActivity extends AppCompatActivity implements Toolbar.OnMe
                         // do whatever
                         final TextView lbtitle = (TextView) view.findViewById(R.id.item_label_title);
                         The_LabelStr = lbtitle.getText().toString();
-                        Toast.makeText(all_labelActivity.this, The_LabelStr, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(all_labelActivity.this, The_LabelStr, Toast.LENGTH_SHORT).show();
                         startLabel_askActivity();
 
                     }
@@ -219,7 +219,7 @@ public class all_labelActivity extends AppCompatActivity implements Toolbar.OnMe
         RequestQueue queue = Volley.newRequestQueue(this);
         //JSONArray ask=null;
 //       (2)使用相应的请求需求
-        Toast.makeText(this, showurl, Toast.LENGTH_SHORT).show();
+       // Toast.makeText(this, showurl, Toast.LENGTH_SHORT).show();
 
         Map<String, String> map = new HashMap<>();
         map.put("username", login1Activity.usernameStr);

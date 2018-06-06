@@ -1,9 +1,11 @@
 package com.bignerdranch.android.geoquiz.Persondetails;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -54,6 +56,7 @@ public class myAskActivity extends AppCompatActivity implements Toolbar.OnMenuIt
     FullyLinearLayoutManager myask_LayoutManager = new FullyLinearLayoutManager(this);
 
     private static final String url = "http://yuguole.pythonanywhere.com/Iknow/myask";
+    private static final String delaskurl = "http://yuguole.pythonanywhere.com/Iknow/delete_theask";
 
     public static String myasktitleStr;
 
@@ -98,7 +101,7 @@ public class myAskActivity extends AppCompatActivity implements Toolbar.OnMenuIt
         myask_Recycler.addOnItemTouchListener(
                 new RecyclerItemClickListener(myAskActivity.this, myask_Recycler ,new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
-                        Toast.makeText(myAskActivity.this, "点击", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(myAskActivity.this, "点击", Toast.LENGTH_SHORT).show();
                         // do whatever
                         final TextView lbtitle=(TextView)view.findViewById(R.id.item_title);
                         Homepage.asktitleStr=lbtitle.getText().toString();
@@ -107,13 +110,66 @@ public class myAskActivity extends AppCompatActivity implements Toolbar.OnMenuIt
 
                     }
 
-                    @Override public void onLongItemClick(View view, int position) {
-                        Toast.makeText(myAskActivity.this, "长按", Toast.LENGTH_SHORT).show();
-                        // do whatever
+                    @Override public void onLongItemClick(final View view, int position) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(myAskActivity.this);
+                        builder.setTitle("提示");
+                        builder.setMessage("确定删除该问题？");
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // int ret = noteDao.deleteNote(note.getId());
+                                //deleteNote(note.getId());
+                                //refreshNoteList();
+                                final TextView deltitle=(TextView)view.findViewById(R.id.item_title);
+                                String del=deltitle.getText().toString();
+                                delask(del);
+                            }
+                        });
+                        builder.setNegativeButton("取消", null);
+                        builder.create().show();
                     }
                 })
         );
 
+    }
+
+    private void delask(String del) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        //JSONArray ask=null;
+//       (2)使用相应的请求需求
+        //Toast.makeText(this, url, Toast.LENGTH_SHORT).show();
+
+        Map<String, String> map = new HashMap<>();
+        map.put("asktitle", del);
+
+
+        map.put("Content-Type", "application/json; charset=utf-8");
+        JSONObject paramJsonObject = new JSONObject(map);
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, delaskurl, paramJsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        if (response != null && response.length() > 0) {
+
+                            Toast.makeText(myAskActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+                            init();
+
+
+                            //Toast.makeText(getActivity(), mDatas.toString(), Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Toast.makeText(myAskActivity.this, volleyError.toString(), Toast.LENGTH_SHORT).show();
+                Log.i(TAG, volleyError.getMessage(), volleyError);
+            }
+        });
+        //(3)将请求需求加入到请求队列之中。
+        queue.add(request);
     }
 
     private void startAsk_homeActivity() {
@@ -125,7 +181,7 @@ public class myAskActivity extends AppCompatActivity implements Toolbar.OnMenuIt
         RequestQueue queue = Volley.newRequestQueue(this);
         //JSONArray ask=null;
 //       (2)使用相应的请求需求
-        Toast.makeText(this, url, Toast.LENGTH_SHORT).show();
+       // Toast.makeText(this, url, Toast.LENGTH_SHORT).show();
 
         Map<String, String> map = new HashMap<>();
         map.put("username", login1Activity.usernameStr);

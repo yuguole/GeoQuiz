@@ -1,5 +1,6 @@
 package com.bignerdranch.android.geoquiz.The_details;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +17,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bignerdranch.android.geoquiz.Add.addReplyActivity;
 import com.bignerdranch.android.geoquiz.R;
 import com.bignerdranch.android.geoquiz.login1Activity;
 
@@ -413,7 +415,15 @@ public class thereply_detailsActivity extends AppCompatActivity implements Toolb
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        return false;
+        switch (item.getItemId()) {
+
+            case R.id.thereply_refrash:
+                initText();
+                break;
+
+
+        }
+        return true;
     }
 
 

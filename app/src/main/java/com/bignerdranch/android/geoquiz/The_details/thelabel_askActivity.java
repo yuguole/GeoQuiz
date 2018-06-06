@@ -120,7 +120,7 @@ public class thelabel_askActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         //JSONArray ask=null;
 //       (2)使用相应的请求需求
-        Toast.makeText(this, url, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, url, Toast.LENGTH_SHORT).show();
 
         Map<String, String> map = new HashMap<>();
         map.put("label", all_labelActivity.The_LabelStr);
