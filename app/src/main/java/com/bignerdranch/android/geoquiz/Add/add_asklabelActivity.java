@@ -312,13 +312,7 @@ public class add_asklabelActivity extends AppCompatActivity implements Toolbar.O
                                 }
                                 addasklabel_Adapter.notifyDataSetChanged();
                                 Toast.makeText(add_asklabelActivity.this, "删除"+deltitle, Toast.LENGTH_SHORT).show();
-                                // do whatever
-                        /*if (ret > 0){
-                            Toast.makeText(getActivity(), "删除成功", Toast.LENGTH_SHORT).show();
-                            //TODO 删除笔记成功后，记得删除图片（分为本地图片和网络图片）
-                            //获取笔记中图片的列表 StringUtils.getTextFromHtml(note.getContent(), true);
-                            refreshNoteList();
-                        }*/
+
                             }
                         });
                         builder.setNegativeButton("取消", null);
