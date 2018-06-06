@@ -294,47 +294,6 @@ public class theask_detailsActivity extends AppCompatActivity implements Toolbar
     }
 
 
-    private String username;
-    public String UseridToName(String id){
-
-
-        String urluser = "http://yuguole.pythonanywhere.com/Iknow/theuser";
-        //(image_1)使用的方法 创建一个请求队列
-
-        RequestQueue queue = Volley.newRequestQueue(this);
-//       (2)使用相应的请求需求
-        //Toast.makeText(this, urluser, Toast.LENGTH_SHORT).show();
-
-        Map<String, String> map = new HashMap<>();
-        map.put("userid", id);
-
-        map.put("Content-Type", "application/json; charset=utf-8");
-        JSONObject paramJsonObject = new JSONObject(map);
-
-        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, urluser,paramJsonObject,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        if (response != null && response.length() > 0) {
-                            username=response.optString("username");
-
-                        }
-                        //Toast.makeText(getActivity(), mDatas.toString(), Toast.LENGTH_SHORT).show();
-                    }
-
-
-
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                //Toast.makeText(getApplicationContext(), volleyError.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
-        //(3)将请求需求加入到请求队列之中。
-        queue.add(request);
-        return username;
-
-    }
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {

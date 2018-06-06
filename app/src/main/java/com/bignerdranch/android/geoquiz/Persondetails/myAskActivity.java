@@ -105,7 +105,7 @@ public class myAskActivity extends AppCompatActivity implements Toolbar.OnMenuIt
                         // do whatever
                         final TextView lbtitle=(TextView)view.findViewById(R.id.item_title);
                         Homepage.asktitleStr=lbtitle.getText().toString();
-                        Toast.makeText(myAskActivity.this, lbtitle.getText(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(myAskActivity.this, lbtitle.getText(), Toast.LENGTH_SHORT).show();
                         startAsk_homeActivity();
 
                     }

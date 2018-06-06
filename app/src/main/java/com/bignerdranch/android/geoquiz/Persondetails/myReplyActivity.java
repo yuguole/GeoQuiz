@@ -89,14 +89,14 @@ public class myReplyActivity extends AppCompatActivity implements Toolbar.OnMenu
         initClickitem();//点击事件
 
     }
-    
+
 
     //点击跳转事件
     private void initClickitem() {
         myreply_Recycler.addOnItemTouchListener(
                 new RecyclerItemClickListener(myReplyActivity.this, myreply_Recycler,new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
-                        Toast.makeText(myReplyActivity.this, "点击", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(myReplyActivity.this, "点击", Toast.LENGTH_SHORT).show();
                         // do whatever
                         final TextView re_id=(TextView)view.findViewById(R.id.item_myreply_reid);
                         theask_detailsActivity.replyIDStr=re_id.getText().toString();

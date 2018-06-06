@@ -31,6 +31,7 @@ public class Personpage extends Fragment implements Toolbar.OnMenuItemClickListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_personpage, container,false);
+        setHasOptionsMenu(true);
         return view;
     }
 

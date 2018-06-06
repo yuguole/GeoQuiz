@@ -89,9 +89,9 @@ public class addReplyActivity extends AppCompatActivity implements Toolbar.OnMen
 //                判断注册的状态
                         if (status == 200) {
                             Toast.makeText(getApplicationContext(), "添加成功", Toast.LENGTH_SHORT).show();
-                            Intent intent=new Intent(addReplyActivity.this,theask_detailsActivity.class);
-                            startActivity(intent);
-                            //onBackPressed();
+                           // Intent intent=new Intent(addReplyActivity.this,theask_detailsActivity.class);
+                          //  startActivity(intent);
+                            onBackPressed();
 //
                         } else if (status == 500) {
                             Toast.makeText(getApplicationContext(), "添加失败", Toast.LENGTH_SHORT).show();

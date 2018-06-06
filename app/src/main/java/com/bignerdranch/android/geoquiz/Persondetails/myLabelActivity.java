@@ -100,11 +100,11 @@ public class myLabelActivity extends AppCompatActivity implements Toolbar.OnMenu
         mylabel_Recycler.addOnItemTouchListener(
                 new RecyclerItemClickListener(myLabelActivity.this, mylabel_Recycler ,new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
-                        Toast.makeText(myLabelActivity.this, "点击", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(myLabelActivity.this, "点击", Toast.LENGTH_SHORT).show();
                         // do whatever
                         final TextView lbtitle=(TextView)view.findViewById(R.id.item_label_title);
                         all_labelActivity.The_LabelStr=lbtitle.getText().toString();
-                        Toast.makeText(myLabelActivity.this, all_labelActivity.The_LabelStr, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(myLabelActivity.this, all_labelActivity.The_LabelStr, Toast.LENGTH_SHORT).show();
                         startLabel_askActivity();
                     }
 

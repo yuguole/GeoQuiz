@@ -2,6 +2,7 @@ package com.bignerdranch.android.geoquiz.Add;
 
 import android.content.Intent;
 import android.nfc.Tag;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -98,10 +99,17 @@ public class addAskActivity extends  AppCompatActivity implements Toolbar.OnMenu
                         int status = response.optInt("status");
 //                判断注册的状态
                         if (status == 200||status==510) {
-                            Toast.makeText(getApplicationContext(), "添加成功", Toast.LENGTH_SHORT).show();
-                            Intent intent=new Intent(addAskActivity.this,Homepage.class);
-                            startActivity(intent);
+                            for (int i=0;i<add_asklabelActivity.addLabel.size();i++){
+                                LabelBean information=add_asklabelActivity.addLabel.get(i);
+                                String j=information.getLb_title();
+                                Addasklabel(Urladdasklabel,j);
+                            }
+                            //Toast.makeText(getApplicationContext(), login1Activity.usernameStr, Toast.LENGTH_SHORT).show();
+                            //Intent intent=new Intent(addAskActivity.this,FragmentActivity.class);
+                            //startActivity(intent);
                             //onBackPressed();
+                            finish();
+
 //
                         } else if (status == 500) {
                             Toast.makeText(getApplicationContext(), "已有相同问题标题", Toast.LENGTH_SHORT).show();
@@ -143,7 +151,6 @@ public class addAskActivity extends  AppCompatActivity implements Toolbar.OnMenu
                         if (status == 200) {
                             Toast.makeText(getApplicationContext(), "添加"+label+"成功", Toast.LENGTH_SHORT).show();
                             //onBackPressed();
-
 //
                         } else {
                             Toast.makeText(getApplicationContext(), "添加失败", Toast.LENGTH_SHORT).show();
@@ -167,11 +174,7 @@ public class addAskActivity extends  AppCompatActivity implements Toolbar.OnMenu
             case R.id.send_ask:
                 //Toast.makeText(add_asklabelActivity.this, addLabel.toString(), Toast.LENGTH_LONG).show();
                 Addask(Urladdask);
-                for (int i=0;i<add_asklabelActivity.addLabel.size();i++){
-                    LabelBean information=add_asklabelActivity.addLabel.get(i);
-                    String j=information.getLb_title();
-                    Addasklabel(Urladdasklabel,j);
-                }
+
                 break;
 
         }
